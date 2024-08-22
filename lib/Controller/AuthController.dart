@@ -9,6 +9,7 @@ class AuthController extends GetxController {
   RxBool isLoading = false.obs;
 
   final auth = FirebaseAuth.instance;
+  final GoogleSignIn google = GoogleSignIn();
 
   void loginWithEmail() async {
     isLoading.value = true;
@@ -27,8 +28,10 @@ class AuthController extends GetxController {
   }
 
   void signout() async {
-    await auth.signOut();
-    successMessage('Logout');
-    Get.offAll(WelcomePage());
+    await auth.signOut().then((_) {
+      google.signOut();
+      successMessage('Logout');
+      Get.offAll(WelcomePage());
+    });
   }
 }
